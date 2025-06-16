@@ -315,7 +315,7 @@
 <body>
     <header class="header fade-in">
         <h1>نظام متابعة امتحانات الدبلوم العام</h1>
-        <h2>الفصل الدراسي الثاني - الدور الأول للعام الدراسي 2024/2025 م</h2>
+        <h2>الفصل الدراسي الثاني - الدور الأول للعام الدراسي ٢٠٢٤/٢٠٢٥ م</h2>
         <p>مركز حمراء الدروع للتعليم الأساسي</p>
     </header>
     
@@ -336,7 +336,6 @@
             <h3>بيانات امتحان اليوم</h3>
             <div id="today-exam" class="exam-details"></div>
             
-            <!-- مؤقت الامتحان المضاف أسفل مدة الإجابة -->
             <div class="exam-timer" id="exam-timer-box">
                 <h4 id="exam-timer-title">الوقت المتبقي لبدء الامتحان</h4>
                 <div class="exam-time-display" id="exam-timer-display">--:--:--</div>
@@ -345,63 +344,65 @@
     </main>
     
     <footer class="footer">
-        <p>جميع الحقوق محفوظة © مركز حمراء الدروع للتعليم الأساسي 2025</p>
+        <p>جميع الحقوق محفوظة © مركز حمراء الدروع للتعليم الأساسي ٢٠٢٥</p>
     </footer>
 
     <script>
-        // جدول الامتحانات
+        // جدول الامتحانات المعدل بالأرقام العربية
         const examSchedule = [
-            { day: "الإثنين", date: "", subject: "التاريخ (العالم من حولي)", time: "8:00 ص - 11:00 ص" },
-            { day: "الثلاثاء", date: "", subject: "الأحياء", time: "8:00 ص - 11:00 ص" },
-            { day: "الأربعاء", date: "", subject: "اللغة الإنجليزية", time: "8:00 ص - 11:00 ص" },
-            { day: "الخميس", date: "", subject: "التربية الإسلامية", time: "8:00 ص - 11:00 ص" },
-            { day: "الأحد", date: "", subject: "اللغة العربية", time: "8:00 ص - 11:00 ص" },
-            { day: "الإثنين", date: "", subject: "الجغرافيا والتقنيات الحديثة", time: "8:00 ص - 11:00 ص" },
-            { day: "الثلاثاء", date: "", subject: "الكيمياء", time: "8:00 ص - 11:00 ص" },
-            { day: "الأربعاء", date: "", subject: "الدراسات الاجتماعية (هذا وطني)", time: "8:00 ص - 11:00 ص" },
-            { day: "الأحد", date: "", subject: "الفيزياء", time: "8:00 ص - 11:00 ص" }
+            { day: "الإثنين", date: "١٦ يونيو ٢٠٢٥", subject: "التاريخ (العالم من حولي)", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الثلاثاء", date: "١٧ يونيو ٢٠٢٥", subject: "الأحياء", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الأربعاء", date: "١٨ يونيو ٢٠٢٥", subject: "اللغة الإنجليزية", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الخميس", date: "١٩ يونيو ٢٠٢٥", subject: "التربية الإسلامية", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الأحد", date: "٢٣ يونيو ٢٠٢٥", subject: "اللغة العربية", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الإثنين", date: "٢٤ يونيو ٢٠٢٥", subject: "الجغرافيا والتقنيات الحديثة", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الثلاثاء", date: "٢٥ يونيو ٢٠٢٥", subject: "الكيمياء", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الأربعاء", date: "٢٦ يونيو ٢٠٢٥", subject: "الدراسات الاجتماعية (هذا وطني)", time: "٨:٠٠ ص - ١١:٠٠ ص" },
+            { day: "الأحد", date: "٣٠ يونيو ٢٠٢٥", subject: "الفيزياء", time: "٨:٠٠ ص - ١١:٠٠ ص" }
         ];
 
-        // حساب التواريخ بناء على تاريخ اليوم
-        function calculateExamDates() {
-            const today = new Date();
-            const currentDay = today.getDay();
-            
-            let nextSunday = new Date(today);
-            nextSunday.setDate(today.getDate() + (7 - today.getDay()) % 7);
-            
-            let examDate = new Date(nextSunday);
-            
-            examSchedule[4].date = formatDate(examDate); // الأحد: اللغة العربية
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[0].date = formatDate(examDate); // الإثنين: التاريخ
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[1].date = formatDate(examDate); // الثلاثاء: الأحياء
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[2].date = formatDate(examDate); // الأربعاء: الإنجليزية
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[3].date = formatDate(examDate); // الخميس: التربية الإسلامية
-            examDate.setDate(examDate.getDate() + 3); // ننتقل للأحد التالي
-            examSchedule[8].date = formatDate(examDate); // الأحد: الفيزياء
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[5].date = formatDate(examDate); // الإثنين: الجغرافيا
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[6].date = formatDate(examDate); // الثلاثاء: الكيمياء
-            examDate.setDate(examDate.getDate() + 1);
-            examSchedule[7].date = formatDate(examDate); // الأربعاء: الدراسات الاجتماعية
+        // دالة لتحويل الأرقام العربية إلى إنجليزية
+        function arabicToEnglishNumber(arabicNumber) {
+            const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            let englishNumber = '';
+            for (let char of arabicNumber) {
+                if (arabicDigits.includes(char)) {
+                    englishNumber += arabicDigits.indexOf(char);
+                } else {
+                    englishNumber += char;
+                }
+            }
+            return englishNumber;
         }
 
-        function formatDate(date) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        // دالة لتحويل التاريخ العربي إلى كائن Date
+        function parseArabicDate(arabicDate) {
+            const parts = arabicDate.split(' ');
+            const day = parseInt(arabicToEnglishNumber(parts[0]));
+            const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+            const month = monthNames.indexOf(parts[1]);
+            const year = parseInt(arabicToEnglishNumber(parts[2]));
+            return new Date(year, month, day);
+        }
+
+        // دالة لعرض التاريخ باللغة العربية
+        function formatToArabicDate(date) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', numberingSystem: 'arab' };
             return date.toLocaleDateString('ar-EG', options);
+        }
+
+        // دالة لعرض الوقت باللغة العربية
+        function formatToArabicTime(date) {
+            const options = { hour: 'numeric', minute: 'numeric', numberingSystem: 'arab' };
+            return date.toLocaleTimeString('ar-EG', options);
         }
 
         // تحديث التاريخ والوقت
         function updateDateTime() {
             const now = new Date();
-            const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+            const dateStr = formatToArabicDate(now);
             const dayStr = now.toLocaleDateString('ar-EG', { weekday: 'long' });
-            const timeStr = now.toLocaleTimeString('ar-EG');
+            const timeStr = formatToArabicTime(now);
             
             document.getElementById('today-date').textContent = dateStr;
             document.getElementById('current-day').textContent = dayStr;
@@ -413,15 +414,8 @@
 
         // تحديث بيانات امتحان اليوم
         function updateTodayExam(now) {
-            const todayFormatted = formatDate(now);
-            let todayExam = null;
-            
-            for (const exam of examSchedule) {
-                if (exam.date === todayFormatted) {
-                    todayExam = exam;
-                    break;
-                }
-            }
+            const todayFormatted = formatToArabicDate(now);
+            let todayExam = examSchedule.find(exam => exam.date === todayFormatted);
             
             const todayExamDiv = document.getElementById('today-exam');
             if (todayExam) {
@@ -429,8 +423,9 @@
                     <p><strong>المادة:</strong> ${todayExam.subject}</p>
                     <p><strong>تاريخ الامتحان:</strong> ${todayExam.date}</p>
                     <p><strong>وقت الامتحان:</strong> ${todayExam.time}</p>
-                    <p><strong>مدة الإجابة:</strong> 3 ساعات</p>
+                    <p><strong>مدة الإجابة:</strong> ٣ ساعات</p>
                 `;
+                document.getElementById('exam-timer-box').style.display = 'block';
             } else {
                 todayExamDiv.innerHTML = "<p>لا يوجد امتحان مقرر لهذا اليوم</p>";
                 document.getElementById('exam-timer-box').style.display = 'none';
@@ -439,22 +434,12 @@
 
         // تحديث مؤقت الامتحان
         function updateExamTimer(now) {
-            const todayFormatted = formatDate(now);
-            let todayExam = null;
+            const todayFormatted = formatToArabicDate(now);
+            let todayExam = examSchedule.find(exam => exam.date === todayFormatted);
             
-            for (const exam of examSchedule) {
-                if (exam.date === todayFormatted) {
-                    todayExam = exam;
-                    break;
-                }
-            }
+            if (!todayExam) return;
             
-            if (!todayExam) {
-                document.getElementById('exam-timer-box').style.display = 'none';
-                return;
-            }
-            
-            const examStart = new Date(now);
+            const examStart = parseArabicDate(todayExam.date);
             examStart.setHours(8, 0, 0, 0);
             
             const examEnd = new Date(examStart);
@@ -468,7 +453,7 @@
                 // قبل بدء الامتحان
                 timerBox.style.display = 'block';
                 timerBox.classList.remove('active');
-                timerTitle.textContent = 'الوقت المتبقي لبدء الامتحان';
+                timerTitle.textContent = `الوقت المتبقي لبدء امتحان ${todayExam.subject}`;
                 
                 const diff = examStart - now;
                 const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -481,7 +466,7 @@
                 // أثناء الامتحان
                 timerBox.style.display = 'block';
                 timerBox.classList.add('active');
-                timerTitle.textContent = 'الوقت المتبقي للامتحان';
+                timerTitle.textContent = `الوقت المتبقي لامتحان ${todayExam.subject}`;
                 
                 const diff = examEnd - now;
                 const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -503,11 +488,8 @@
             }
         }
 
-        // تهيئة التواريخ عند تحميل الصفحة
-        calculateExamDates();
+        // تهيئة الصفحة
         updateDateTime();
-        
-        // تحديث البيانات كل ثانية
         setInterval(updateDateTime, 1000);
     </script>
 </body>
