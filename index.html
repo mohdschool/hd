@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الامتحانات | مركز حمراء الدروع</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a365d;
+            --primary: #2a4365;
+            --primary-light: #2c5282;
+            --accent: #e53e3e;
+            --accent-light: #fc8181;
+            --light: #f7fafc;
+            --gray: #e2e8f0;
+            --dark: #2d3748;
+            --success: #38a169;
+            --warning: #dd6b20;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 1.8rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 100;
+            border-bottom: 4px solid var(--accent);
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+        
+        .header h1 {
+            font-size: 2.4rem;
+            margin-bottom: 0.6rem;
+            font-weight: 800;
+        }
+        
+        .header h2 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--gray);
+            margin-bottom: 0.4rem;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* DateTime Bar */
+        .datetime-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 50;
+        }
+        
+        .time-display {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .time-display i {
+            margin-left: 0.8rem;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .date-display {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .current-date {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .current-day {
+            font-size: 1.2rem;
+            color: var(--primary-light);
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+        
+        /* Exam Card */
+        .exam-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 3rem;
+            width: 90%;
+            max-width: 850px;
+            text-align: center;
+            margin-bottom: 3rem;
+            border-top: 6px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .exam-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .exam-card h3 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .exam-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+        }
+        
+        .exam-details {
+            font-size: 1.5rem;
+            line-height: 2.5;
+        }
+        
+        .exam-details p {
+            margin: 0.8rem 0;
+        }
+        
+        .exam-details strong {
+            color: var(--primary-dark);
+            font-weight: 700;
+            position: relative;
+        }
+        
+        .exam-details strong::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        /* Exam Timer */
+        .exam-timer {
+            margin-top: 2rem;
+            width: 100%;
+            background: linear-gradient(135deg, var(--warning), #ed8936);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .exam-timer.active {
+            background: linear-gradient(135deg, var(--success), #38a169);
+        }
+        
+        .exam-timer h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .exam-time-display {
+            font-size: 2.5rem;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.8rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .datetime-bar {
+                flex-direction: column;
+                gap: 1.2rem;
+                padding: 1.2rem;
+            }
+            
+            .date-display {
+                align-items: center;
+            }
+            
+            .exam-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .exam-card h3 {
+                font-size: 1.7rem;
+            }
+            
+            .exam-details {
+                font-size: 1.3rem;
+                line-height: 2;
+            }
+            
+            .exam-time-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header fade-in">
+        <h1>نظام متابعة امتحانات الدبلوم العام</h1>
+        <h2>الفصل الدراسي الثاني - الدور الأول للعام الدراسي 2024/2025 م</h2>
+        <p>مركز حمراء الدروع للتعليم الأساسي</p>
+    </header>
+    
+    <div class="datetime-bar fade-in">
+        <div class="time-display">
+            <i class="fas fa-clock"></i>
+            <span id="current-time"></span>
+        </div>
+        
+        <div class="date-display">
+            <div class="current-date" id="today-date"></div>
+            <div class="current-day" id="current-day"></div>
+        </div>
+    </div>
+    
+    <main class="main-content">
+        <div class="exam-card fade-in">
+            <h3>بيانات امتحان اليوم</h3>
+            <div id="today-exam" class="exam-details"></div>
+            
+            <!-- مؤقت الامتحان المضاف أسفل مدة الإجابة -->
+            <div class="exam-timer" id="exam-timer-box">
+                <h4 id="exam-timer-title">الوقت المتبقي لبدء الامتحان</h4>
+                <div class="exam-time-display" id="exam-timer-display">--:--:--</div>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>جميع الحقوق محفوظة © مركز حمراء الدروع للتعليم الأساسي 2025</p>
+    </footer>
+
+    <script>
+        // جدول الامتحانات
+        const examSchedule = [
+            { day: "الإثنين", date: "", subject: "التاريخ (العالم من حولي)", time: "8:00 ص - 11:00 ص" },
+            { day: "الثلاثاء", date: "", subject: "الأحياء", time: "8:00 ص - 11:00 ص" },
+            { day: "الأربعاء", date: "", subject: "اللغة الإنجليزية", time: "8:00 ص - 11:00 ص" },
+            { day: "الخميس", date: "", subject: "التربية الإسلامية", time: "8:00 ص - 11:00 ص" },
+            { day: "الأحد", date: "", subject: "اللغة العربية", time: "8:00 ص - 11:00 ص" },
+            { day: "الإثنين", date: "", subject: "الجغرافيا والتقنيات الحديثة", time: "8:00 ص - 11:00 ص" },
+            { day: "الثلاثاء", date: "", subject: "الكيمياء", time: "8:00 ص - 11:00 ص" },
+            { day: "الأربعاء", date: "", subject: "الدراسات الاجتماعية (هذا وطني)", time: "8:00 ص - 11:00 ص" },
+            { day: "الأحد", date: "", subject: "الفيزياء", time: "8:00 ص - 11:00 ص" }
+        ];
+
+        // حساب التواريخ بناء على تاريخ اليوم
+        function calculateExamDates() {
+            const today = new Date();
+            const currentDay = today.getDay();
+            
+            let nextSunday = new Date(today);
+            nextSunday.setDate(today.getDate() + (7 - today.getDay()) % 7);
+            
+            let examDate = new Date(nextSunday);
+            
+            examSchedule[4].date = formatDate(examDate); // الأحد: اللغة العربية
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[0].date = formatDate(examDate); // الإثنين: التاريخ
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[1].date = formatDate(examDate); // الثلاثاء: الأحياء
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[2].date = formatDate(examDate); // الأربعاء: الإنجليزية
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[3].date = formatDate(examDate); // الخميس: التربية الإسلامية
+            examDate.setDate(examDate.getDate() + 3); // ننتقل للأحد التالي
+            examSchedule[8].date = formatDate(examDate); // الأحد: الفيزياء
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[5].date = formatDate(examDate); // الإثنين: الجغرافيا
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[6].date = formatDate(examDate); // الثلاثاء: الكيمياء
+            examDate.setDate(examDate.getDate() + 1);
+            examSchedule[7].date = formatDate(examDate); // الأربعاء: الدراسات الاجتماعية
+        }
+
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('ar-EG', options);
+        }
+
+        // تحديث التاريخ والوقت
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+            const dayStr = now.toLocaleDateString('ar-EG', { weekday: 'long' });
+            const timeStr = now.toLocaleTimeString('ar-EG');
+            
+            document.getElementById('today-date').textContent = dateStr;
+            document.getElementById('current-day').textContent = dayStr;
+            document.getElementById('current-time').textContent = timeStr;
+            
+            updateTodayExam(now);
+            updateExamTimer(now);
+        }
+
+        // تحديث بيانات امتحان اليوم
+        function updateTodayExam(now) {
+            const todayFormatted = formatDate(now);
+            let todayExam = null;
+            
+            for (const exam of examSchedule) {
+                if (exam.date === todayFormatted) {
+                    todayExam = exam;
+                    break;
+                }
+            }
+            
+            const todayExamDiv = document.getElementById('today-exam');
+            if (todayExam) {
+                todayExamDiv.innerHTML = `
+                    <p><strong>المادة:</strong> ${todayExam.subject}</p>
+                    <p><strong>تاريخ الامتحان:</strong> ${todayExam.date}</p>
+                    <p><strong>وقت الامتحان:</strong> ${todayExam.time}</p>
+                    <p><strong>مدة الإجابة:</strong> 3 ساعات</p>
+                `;
+            } else {
+                todayExamDiv.innerHTML = "<p>لا يوجد امتحان مقرر لهذا اليوم</p>";
+                document.getElementById('exam-timer-box').style.display = 'none';
+            }
+        }
+
+        // تحديث مؤقت الامتحان
+        function updateExamTimer(now) {
+            const todayFormatted = formatDate(now);
+            let todayExam = null;
+            
+            for (const exam of examSchedule) {
+                if (exam.date === todayFormatted) {
+                    todayExam = exam;
+                    break;
+                }
+            }
+            
+            if (!todayExam) {
+                document.getElementById('exam-timer-box').style.display = 'none';
+                return;
+            }
+            
+            const examStart = new Date(now);
+            examStart.setHours(8, 0, 0, 0);
+            
+            const examEnd = new Date(examStart);
+            examEnd.setHours(examStart.getHours() + 3);
+            
+            const timerBox = document.getElementById('exam-timer-box');
+            const timerTitle = document.getElementById('exam-timer-title');
+            const timerDisplay = document.getElementById('exam-timer-display');
+            
+            if (now < examStart) {
+                // قبل بدء الامتحان
+                timerBox.style.display = 'block';
+                timerBox.classList.remove('active');
+                timerTitle.textContent = 'الوقت المتبقي لبدء الامتحان';
+                
+                const diff = examStart - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                timerDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else if (now >= examStart && now < examEnd) {
+                // أثناء الامتحان
+                timerBox.style.display = 'block';
+                timerBox.classList.add('active');
+                timerTitle.textContent = 'الوقت المتبقي للامتحان';
+                
+                const diff = examEnd - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                timerDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // إضافة تأثير النبض عند اقتراب نهاية الوقت
+                if (hours === 0 && minutes < 30) {
+                    timerDisplay.classList.add('pulse');
+                } else {
+                    timerDisplay.classList.remove('pulse');
+                }
+            } else {
+                // بعد انتهاء الامتحان
+                timerBox.style.display = 'none';
+            }
+        }
+
+        // تهيئة التواريخ عند تحميل الصفحة
+        calculateExamDates();
+        updateDateTime();
+        
+        // تحديث البيانات كل ثانية
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
